@@ -86,6 +86,7 @@ function ProductModal({ product, onClose, onSaved }) {
       if (isEditing) body.id = Number(product.id);
       await request(isEditing ? '/product/update' : '/product/create', {
         method: 'POST',
+        headers: isEditing ? { 'Idempotency-Key': crypto.randomUUID() } : undefined,
         body: JSON.stringify(body),
       });
       onSaved(isEditing ? 'Product updated successfully.' : 'Product created successfully.');
